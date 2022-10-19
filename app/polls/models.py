@@ -175,4 +175,4 @@ class Osoba(models.Model):
     )
     imie = models.CharField(max_length=45)
     nazwisko = models.CharField(max_length=45)
-    miesiac_urodzenia = models.CharField(max_length=2, choices=MIESIACE_URODZENIA)
+    miesiac_urodzenia = models.CharField(max_length=2, choices=MIESIACE_URODZENIA, default='1')
