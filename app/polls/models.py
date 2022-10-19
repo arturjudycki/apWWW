@@ -193,3 +193,6 @@ class Osoba(models.Model):
     data_dodania = models.DateField(auto_now_add=True)
     def __str__(self):
         return self.imie + " " + self.nazwisko
+
+    class Meta:
+        ordering = ["nazwisko"]
