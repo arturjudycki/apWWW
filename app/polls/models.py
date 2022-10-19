@@ -158,21 +158,36 @@ class User(models.Model):
         db_table = 'user'
 
 class Osoba(models.Model):
-    MIESIACE_URODZENIA = (
-        ('1', 'Styczeń'),
-        ('2', 'Luty'),
-        ('3', 'Marzec'),
-        ('4', 'Kwiecień'),
-        ('5', 'Maj'),
-        ('6', 'Czerwiec'),
-        ('7', 'Lipiec'),
-        ('8', 'Sierpień'),
-        ('9', 'Wrzesień'),
-        ('10', 'Październik'),
-        ('11', 'Listopad'),
-        ('12', 'Grudzień'),
-    )
+    class Miesiace_urodzenia(models.IntegerChoices):
+        Styczeń = 1
+        Luty = 2
+        Marzec = 3
+        Kwiecień = 4
+        Maj = 5
+        Czerwiec = 6
+        Lipiec = 7
+        Sierpień = 8
+        Wrzesień = 9
+        Październik = 10
+        Listopad = 11
+        Grudzień = 12
+
+    # MIESIACE_URODZENIA = (
+    #     ('1', 'Styczeń'),
+    #     ('2', 'Luty'),
+    #     ('3', 'Marzec'),
+    #     ('4', 'Kwiecień'),
+    #     ('5', 'Maj'),
+    #     ('6', 'Czerwiec'),
+    #     ('7', 'Lipiec'),
+    #     ('8', 'Sierpień'),
+    #     ('9', 'Wrzesień'),
+    #     ('10', 'Październik'),
+    #     ('11', 'Listopad'),
+    #     ('12', 'Grudzień'),
+    # )
     imie = models.CharField(max_length=45)
     nazwisko = models.CharField(max_length=45)
-    miesiac_urodzenia = models.CharField(max_length=2, choices=MIESIACE_URODZENIA, default='1')
+    # miesiac_urodzenia = models.CharField(max_length=2, choices=MIESIACE_URODZENIA, default='1')
+    miesiac_urodzenia = models.IntegerField(choices=Miesiace_urodzenia.choices)
     data_dodania = models.DateField(auto_now_add=True)
