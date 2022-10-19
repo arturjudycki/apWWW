@@ -7,7 +7,6 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
-
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
 
@@ -176,3 +175,4 @@ class Osoba(models.Model):
     imie = models.CharField(max_length=45)
     nazwisko = models.CharField(max_length=45)
     miesiac_urodzenia = models.CharField(max_length=2, choices=MIESIACE_URODZENIA, default='1')
+    data_dodania = models.DateField(auto_now_add=True)
