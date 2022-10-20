@@ -5,7 +5,8 @@ from .models import User, Osoba, Druzyna
 
 class OsobaAdmin(admin.ModelAdmin):
     readonly_fields = ('data_dodania',)
-    list_display = ['imie', 'nazwisko', 'miesiac_urodzenia', 'data_dodania']
+    list_display = ('imie', 'nazwisko', 'miesiac_urodzenia', 'data_dodania', 'get_team')
+
 class DruzynaAdmin(admin.ModelAdmin):
     list_display = ['nazwa', 'kraj']
 

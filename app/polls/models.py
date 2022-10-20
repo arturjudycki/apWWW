@@ -157,6 +157,13 @@ class User(models.Model):
     class Meta:
         db_table = 'user'
 
+class Druzyna(models.Model):
+    nazwa = models.CharField(max_length=255)
+    kraj = models.CharField(max_length=2)
+
+    def __str__(self):
+        return self.nazwa + ' (' + self.kraj + ')'
+
 class Osoba(models.Model):
     class Miesiace_urodzenia(models.IntegerChoices):
         Styczeń = 1
@@ -192,16 +199,17 @@ class Osoba(models.Model):
     miesiac_urodzenia = models.IntegerField(choices=Miesiace_urodzenia.choices)
     data_dodania = models.DateField(auto_now_add=True)
     druzyna = models.ForeignKey(
-        'Druzyna',
+        Druzyna,
         on_delete = models.SET_NULL,
+        blank=True,
         null=True,
     )
     def __str__(self):
         return self.imie + " " + self.nazwisko
 
+    @property
+    def get_team(self):
+        return self.druzyna
+
     class Meta:
         ordering = ["nazwisko"]
-
-class Druzyna(models.Model):
-    nazwa = models.CharField(max_length=255)
-    kraj = models.CharField(max_length=2)
