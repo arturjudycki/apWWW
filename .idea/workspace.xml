@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="051a4b50-77a8-470f-9491-914175dc3aad" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/polls/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/polls/serializers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
