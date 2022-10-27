@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Competition
+from .models import User, Competition, Registration, Osoba, Druzyna
 
 class UserSerializer(serializers.Serializer):
     iduser = serializers.IntegerField(required=True, db_column='idUser', primary_key=True)
@@ -39,3 +39,19 @@ class CompetitionSerializer(serializers.Serializer):
         instance.save()
         return instance
 
+class RegistrationModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Registration
+        fields = ['idregistration', 'status', 'idcompetition', 'iduser']
+
+class OsobaModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Osoba
+        fields = ['id', 'imie', 'nazwisko', 'miesiac_urodzenia', 'data_dodania', 'druzyna']
+        read_only_fields = ['id']
+
+class DruzynaModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Druzyna
+        fields = ['id', 'nazwa', 'kraj']
+        read_only_fields = ['id']
