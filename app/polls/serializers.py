@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import User, Competition, Registration, Osoba, Druzyna
 
 class UserSerializer(serializers.Serializer):
-    iduser = serializers.IntegerField()
+    iduser = serializers.IntegerField(required=True)
     email = serializers.CharField(max_length=200, required=True)
     password = serializers.CharField(max_length=45, required=True)
     firstname = serializers.CharField(max_length=45, required=True)
@@ -23,7 +23,7 @@ class UserSerializer(serializers.Serializer):
         instance.save()
         return instance
 class CompetitionSerializer(serializers.Serializer):
-    idcompetition = serializers.IntegerField()
+    idcompetition = serializers.IntegerField(required=True)
     city = serializers.CharField(max_length=45, required=True)
     street = serializers.CharField(max_length=45, required=True)
     date = serializers.DateField(required=True)

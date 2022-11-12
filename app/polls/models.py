@@ -6,6 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
+from datetime import datetime
 
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=150)
@@ -134,17 +135,6 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class Registration(models.Model):
-    idregistration = models.IntegerField(db_column='idRegistration', primary_key=True)  # Field name made lowercase.
-    status = models.CharField(max_length=45)
-    idcompetition = models.ForeignKey(Competition, models.DO_NOTHING, db_column='idCompetition')  # Field name made lowercase.
-    iduser = models.ForeignKey('User', models.DO_NOTHING, db_column='idUser')  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'registration'
-
-
 class User(models.Model):
     iduser = models.IntegerField(db_column='idUser', primary_key=True)  # Field name made lowercase.
     email = models.CharField(max_length=200)
@@ -156,6 +146,16 @@ class User(models.Model):
 
     class Meta:
         db_table = 'user'
+
+class Registration(models.Model):
+    idregistration = models.IntegerField(db_column='idRegistration', primary_key=True)  # Field name made lowercase.
+    status = models.CharField(max_length=45)
+    idcompetition = models.ForeignKey(Competition, models.DO_NOTHING, db_column='idCompetition')  # Field name made lowercase.
+    iduser = models.ForeignKey(User, models.DO_NOTHING, db_column='idUser')  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'registration'
 
 class Druzyna(models.Model):
     nazwa = models.CharField(max_length=255)
@@ -196,7 +196,7 @@ class Osoba(models.Model):
     imie = models.CharField(max_length=45)
     nazwisko = models.CharField(max_length=45)
     # miesiac_urodzenia = models.CharField(max_length=2, choices=MIESIACE_URODZENIA, default='1')
-    miesiac_urodzenia = models.IntegerField(choices=Miesiace_urodzenia.choices)
+    miesiac_urodzenia = models.IntegerField(choices=Miesiace_urodzenia.choices, default=datetime.now().month)
     data_dodania = models.DateField(auto_now_add=True)
     druzyna = models.ForeignKey(
         Druzyna,
