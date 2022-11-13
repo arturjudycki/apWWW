@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import User, Competition, Registration, Osoba, Druzyna
+from datetime import datetime
 
 class UserSerializer(serializers.Serializer):
     iduser = serializers.IntegerField(required=True)
@@ -49,6 +50,22 @@ class OsobaModelSerializer(serializers.ModelSerializer):
         model = Osoba
         fields = ['id', 'imie', 'nazwisko', 'miesiac_urodzenia', 'data_dodania', 'druzyna']
         read_only_fields = ['id']
+
+    def validate_imie(self, value):
+
+        if not value.isalpha():
+            raise serializers.ValidationError(
+                "Imię może zawieać tylko litery.",
+            )
+        return value
+
+    def validate_miesiac_urodzenia(self, value):
+
+        if value > datetime.now().month:
+            raise serializers.ValidationError(
+                "Miesiąc urodzenia nie może być przyszłości.",
+            )
+        return value
 
 class DruzynaModelSerializer(serializers.ModelSerializer):
     class Meta:
