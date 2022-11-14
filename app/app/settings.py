@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'polls',
     'debug_toolbar',
     'rest_framework',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
