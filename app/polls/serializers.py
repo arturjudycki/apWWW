@@ -55,7 +55,7 @@ class OsobaModelSerializer(serializers.ModelSerializer):
 
         if not value.isalpha():
             raise serializers.ValidationError(
-                "Imię może zawieać tylko litery.",
+                "Imię może zawierać tylko litery.",
             )
         return value
 
