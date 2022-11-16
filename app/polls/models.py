@@ -193,6 +193,7 @@ class Osoba(models.Model):
     #     ('11', 'Listopad'),
     #     ('12', 'Grudzień'),
     # )
+
     imie = models.CharField(max_length=45)
     nazwisko = models.CharField(max_length=45)
     # miesiac_urodzenia = models.CharField(max_length=2, choices=MIESIACE_URODZENIA, default='1')
@@ -204,6 +205,7 @@ class Osoba(models.Model):
         blank=True,
         null=True,
     )
+    wlasciciel = models.ForeignKey('auth.User', related_name='osoby', on_delete=models.CASCADE)
     def __str__(self):
         return self.imie + " " + self.nazwisko
 

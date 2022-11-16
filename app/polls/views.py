@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework import filters
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from .models import Osoba, Druzyna
 from .serializers import OsobaModelSerializer, DruzynaModelSerializer
@@ -15,16 +15,20 @@ from rest_framework.views import APIView
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+
 @api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def osoba_list(request):
     if request.method == 'GET':
         osobas = Osoba.objects.all()
         serializer = OsobaModelSerializer(osobas, many=True)
         return Response(serializer.data)
+def perform_create(self, serializer):
+    serializer.save(wlasciciel=self.request.user)
 
 @api_view(['GET'])
 def osoba_detail(request, pk):
-
     try:
         osoba = Osoba.objects.get(pk=pk)
     except Osoba.DoesNotExist:
@@ -39,7 +43,6 @@ def osoba_detail(request, pk):
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def osoba_update_delete(request, pk):
-
     try:
         osoba = Osoba.objects.get(pk=pk)
     except Osoba.DoesNotExist:
@@ -55,8 +58,13 @@ def osoba_update_delete(request, pk):
     elif request.method == 'DELETE':
         osoba.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+def perform_create(self, serializer):
+    serializer.save(wlasciciel=self.request.user)
+
 
 @api_view(['POST'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def osoba_add(request):
     if request.method == 'POST':
         serializer = OsobaModelSerializer(data=request.data)
@@ -65,9 +73,9 @@ def osoba_add(request):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 @api_view(['GET'])
 def osoba_detail_name(request, imie):
-
     try:
         osobas = Osoba.objects.all().filter(imie=imie)
     except Osoba.DoesNotExist:
@@ -77,6 +85,7 @@ def osoba_detail_name(request, imie):
         serializer = OsobaModelSerializer(osobas, many=True)
         return Response(serializer.data)
 
+
 @api_view(['GET'])
 def druzyna_list(request):
     if request.method == 'GET':
@@ -84,9 +93,9 @@ def druzyna_list(request):
         serializer = DruzynaModelSerializer(druzynas, many=True)
         return Response(serializer.data)
 
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def druzyna_detail(request, pk):
-
     try:
         druzyna = Druzyna.objects.get(pk=pk)
     except Druzyna.DoesNotExist:
@@ -107,6 +116,7 @@ def druzyna_detail(request, pk):
         druzyna.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
 @api_view(['POST'])
 def druzyna_add(request):
     if request.method == 'POST':
@@ -115,6 +125,7 @@ def druzyna_add(request):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 # class OsobaList(APIView):
 #

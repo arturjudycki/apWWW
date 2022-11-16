@@ -46,9 +46,10 @@ class RegistrationModelSerializer(serializers.ModelSerializer):
         fields = ['idregistration', 'status', 'idcompetition', 'iduser']
 
 class OsobaModelSerializer(serializers.ModelSerializer):
+    wlasciciel = serializers.ReadOnlyField(source='wlasciciel.username')
     class Meta:
         model = Osoba
-        fields = ['id', 'imie', 'nazwisko', 'miesiac_urodzenia', 'data_dodania', 'druzyna']
+        fields = ['id', 'imie', 'nazwisko', 'miesiac_urodzenia', 'data_dodania', 'druzyna', 'wlasciciel']
         read_only_fields = ['id']
 
     def validate_imie(self, value):
