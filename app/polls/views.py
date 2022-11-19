@@ -136,6 +136,19 @@ def druzyna_add(request):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication, BearerTokenAuthentication])
+def druzyna_czlonkowie_detail(request, pk):
+    try:
+        druzyna = Druzyna.objects.get(pk=pk)
+    except Druzyna.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        osobas = Osoba.objects.filter(druzyna=pk)
+
+        serializer = OsobaModelSerializer(osobas, many=True)
+        return Response(serializer.data)
 
 # class OsobaList(APIView):
 #

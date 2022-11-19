@@ -18,4 +18,5 @@ urlpatterns = [
     path('druzynas/', views.druzyna_list),
     path('druzynas/<int:pk>/', views.druzyna_detail),
     path('druzynas/add/', views.druzyna_add),
+    path('druzynas/<int:pk>/czlonkowie', views.druzyna_czlonkowie_detail),
 ]
