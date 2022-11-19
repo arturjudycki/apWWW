@@ -3,12 +3,12 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    # path('', views.index, name='index'),
     path('api-auth/', include('rest_framework.urls')),
     path('osobas/', views.osoba_list),
     path('osobas/<int:pk>/', views.osoba_detail),
-    path('osobas/update/<int:pk>/', views.osoba_update_delete),
-    path('osobas/delete/<int:pk>/', views.osoba_update_delete),
+    path('osobas/update/<int:pk>/', views.osoba_update),
+    path('osobas/delete/<int:pk>/', views.osoba_delete),
     path('osobas/add/', views.osoba_add),
     path('osobas/<imie>/', views.osoba_detail_name),
     # path('osobas/', views.OsobaList.as_view()),

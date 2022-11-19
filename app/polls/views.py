@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from .models import Osoba, Druzyna
+from .models import Osoba, Druzyna, BearerTokenAuthentication
 from .serializers import OsobaModelSerializer, DruzynaModelSerializer
 
 from django.http import Http404
@@ -19,7 +19,7 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def osoba_list(request):
     if request.method == 'GET':
@@ -41,10 +41,10 @@ def osoba_detail(request, pk):
         serializer = OsobaModelSerializer(osoba)
         return Response(serializer.data)
 
-@api_view(['PUT', 'DELETE'])
-@authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
+@api_view(['PUT'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
-def osoba_update_delete(request, pk):
+def osoba_update(request, pk):
     try:
         osoba = Osoba.objects.get(pk=pk)
     except Osoba.DoesNotExist:
@@ -57,15 +57,23 @@ def osoba_update_delete(request, pk):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    elif request.method == 'DELETE':
+@api_view(['DELETE'])
+@authentication_classes([SessionAuthentication, BasicAuthentication, BearerTokenAuthentication])
+def osoba_delete(request, pk):
+    try:
+        osoba = Osoba.objects.get(pk=pk)
+    except Osoba.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'DELETE':
         osoba.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 def perform_create(self, serializer):
     serializer.save(wlasciciel=self.request.user)
 
-
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
 def osoba_add(request):
     if request.method == 'POST':
@@ -188,6 +196,3 @@ def druzyna_add(request):
 
 for user in User.objects.all():
     Token.objects.get_or_create(user=user)
-
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
