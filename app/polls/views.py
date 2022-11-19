@@ -4,7 +4,7 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework import filters
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from .models import Osoba, Druzyna
@@ -15,9 +15,11 @@ from rest_framework.views import APIView
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def osoba_list(request):
     if request.method == 'GET':
@@ -40,7 +42,7 @@ def osoba_detail(request, pk):
         return Response(serializer.data)
 
 @api_view(['PUT', 'DELETE'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def osoba_update_delete(request, pk):
     try:
@@ -63,7 +65,7 @@ def perform_create(self, serializer):
 
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def osoba_add(request):
     if request.method == 'POST':
@@ -183,6 +185,9 @@ def druzyna_add(request):
 #         osobas = Osoba.objects.all().filter(imie=imie)
 #         serializer = OsobaModelSerializer(osobas, many=True)
 #         return Response(serializer.data)
+
+for user in User.objects.all():
+    Token.objects.get_or_create(user=user)
 
 def index(request):
     return HttpResponse("Hello, world. You're at the polls index.")
