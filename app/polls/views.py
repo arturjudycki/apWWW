@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from .models import Osoba, Druzyna, BearerTokenAuthentication
+from .models import Osoba, Druzyna
 from .serializers import OsobaModelSerializer, DruzynaModelSerializer
 
 from django.http import Http404
@@ -19,15 +19,15 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def osoba_list(request):
     if request.method == 'GET':
         osobas = Osoba.objects.all()
         serializer = OsobaModelSerializer(osobas, many=True)
         return Response(serializer.data)
-def perform_create(self, serializer):
-    serializer.save(wlasciciel=self.request.user)
+# def perform_create(self, serializer):
+#     serializer.save(wlasciciel=self.request.user)
 
 @api_view(['GET'])
 def osoba_detail(request, pk):
@@ -35,6 +35,10 @@ def osoba_detail(request, pk):
         osoba = Osoba.objects.get(pk=pk)
     except Osoba.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
+    user = request.user
+    if osoba.wlasciciel != user:
+        return Response({'response': 'You dont have permission to view that.'})
 
     if request.method == 'GET':
         osoba = Osoba.objects.get(pk=pk)
@@ -50,6 +54,10 @@ def osoba_update(request, pk):
     except Osoba.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    user = request.user
+    if osoba.wlasciciel != user:
+        return Response({'response': 'You dont have permission to edit that.'})
+
     if request.method == 'PUT':
         serializer = OsobaModelSerializer(osoba, data=request.data)
         if serializer.is_valid():
@@ -58,19 +66,22 @@ def osoba_update(request, pk):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-@authentication_classes([SessionAuthentication, BasicAuthentication, BearerTokenAuthentication])
+@authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def osoba_delete(request, pk):
     try:
         osoba = Osoba.objects.get(pk=pk)
     except Osoba.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
+    user = request.user
+    if osoba.wlasciciel != user:
+        return Response({'response': 'You dont have permission to delete that.'})
+
     if request.method == 'DELETE':
         osoba.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-def perform_create(self, serializer):
-    serializer.save(wlasciciel=self.request.user)
 
 @api_view(['POST'])
 @authentication_classes([SessionAuthentication, BasicAuthentication])
@@ -137,7 +148,7 @@ def druzyna_add(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, BasicAuthentication, BearerTokenAuthentication])
+@authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
 def druzyna_czlonkowie_detail(request, pk):
     try:
         druzyna = Druzyna.objects.get(pk=pk)
