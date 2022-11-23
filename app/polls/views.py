@@ -21,11 +21,18 @@ from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
 
 # @permission_required('polls.view_osoba')
-def person_view(request):
-    if not request.user.has_perm('polls.view_osoba'):
-        return HttpResponse(f"Użytkownik, którego godność to {request.user.username} nie posiada uprawnienia view_osoba")
+def person_view(request,pk):
+
+    if request.user.has_perm('polls.can_view_other_persons'):
+        osoba = Osoba.objects.get(pk=pk)
+        return HttpResponse(f"{osoba.imie} {osoba.nazwisko} {osoba.miesiac_urodzenia} {osoba.druzyna} {osoba.wlasciciel}")
     else:
-        return HttpResponse(f"Użytkownik, którego godność to {request.user.username} posiada uprawnienie view_osoba")
+        return HttpResponse("Nie masz praw do wyświetlenia tego użytkownika")
+
+    # if not request.user.has_perm('polls.view_osoba'):
+    #     return HttpResponse(f"Użytkownik, którego godność to {request.user.username} nie posiada uprawnienia view_osoba")
+    # else:
+    #     return HttpResponse(f"Użytkownik, którego godność to {request.user.username} posiada uprawnienie view_osoba")
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])

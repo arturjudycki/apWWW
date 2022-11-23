@@ -219,8 +219,12 @@ class Osoba(models.Model):
     def get_team(self):
         return self.druzyna
 
+
     class Meta:
         ordering = ["nazwisko"]
+        permissions = [
+            ("can_view_other_persons", "Pozwala przeglądać obiekty modelu Osoba, zalogowanym użytkownikom, którzy nie są własicielami danego obiektu modelu Osoba")
+        ]
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
