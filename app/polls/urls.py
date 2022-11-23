@@ -16,8 +16,9 @@ urlpatterns = [
     # path('osobas/<int:pk>/', views.OsobaDetail.as_view()),
     # path('osobas/add/', views.OsobaAdd.as_view()),
     # path('osobas/<imie>/', views.OsobaDetailName.as_view()),
-    path('druzynas/', views.druzyna_list),
-    path('druzynas/<int:pk>/', views.druzyna_detail),
-    path('druzynas/add/', views.druzyna_add),
-    path('druzynas/<int:pk>/czlonkowie', views.druzyna_czlonkowie_detail),
+    # path('druzynas/', views.druzyna_list),
+    # path('druzynas/<int:pk>/', views.druzyna_detail),
+    # path('druzynas/add/', views.druzyna_add),
+    # path('druzynas/<int:pk>/czlonkowie', views.druzyna_czlonkowie_detail),
+    path('druzynas/<int:pk>/', views.DruzynaDetail.as_view()),
 ]
