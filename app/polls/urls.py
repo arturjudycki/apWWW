@@ -11,7 +11,7 @@ urlpatterns = [
     path('osobas/update/<int:pk>/', views.osoba_update),
     path('osobas/delete/<int:pk>/', views.osoba_delete),
     path('osobas/add/', views.osoba_add),
-    path('osobas/<imie>/', views.osoba_detail_name),
+    path('osobas/<str:letter>/', views.osoba_detail_name),
     # path('osobas/', views.OsobaList.as_view()),
     # path('osobas/<int:pk>/', views.OsobaDetail.as_view()),
     # path('osobas/add/', views.OsobaAdd.as_view()),

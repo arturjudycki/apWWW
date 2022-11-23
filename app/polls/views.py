@@ -112,9 +112,9 @@ def osoba_add(request):
 
 
 @api_view(['GET'])
-def osoba_detail_name(request, imie):
+def osoba_detail_name(request, letter):
     try:
-        osobas = Osoba.objects.all().filter(imie=imie)
+        osobas = Osoba.objects.all().filter(imie__contains=letter)
     except Osoba.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
