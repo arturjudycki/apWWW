@@ -4,6 +4,8 @@ from django.shortcuts import render
 from rest_framework import status
 from rest_framework import filters
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from django.contrib.auth.decorators import permission_required
+from django.core.exceptions import PermissionDenied
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
@@ -17,6 +19,13 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
+
+# @permission_required('polls.view_osoba')
+def person_view(request):
+    if not request.user.has_perm('polls.view_osoba'):
+        return HttpResponse(f"Użytkownik, którego godność to {request.user.username} nie posiada uprawnienia view_osoba")
+    else:
+        return HttpResponse(f"Użytkownik, którego godność to {request.user.username} posiada uprawnienie view_osoba")
 
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
