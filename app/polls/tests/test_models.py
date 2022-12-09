@@ -33,4 +33,4 @@ class DruzynaModelTest(TestCase):
     def test_druzyna_different_id(self):
         imdb = Druzyna.objects.get(kraj="UK")
         filmweb = Druzyna.objects.get(kraj="PL")
-        self.assertEqual(filmweb.id - imdb.id, 2)
+        self.assertEqual(filmweb.id - imdb.id, 1)
