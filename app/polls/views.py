@@ -62,7 +62,7 @@ def osoba_detail(request, pk):
         return Response(serializer.data)
 
 @api_view(['PUT'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def osoba_update(request, pk):
     try:
@@ -100,7 +100,7 @@ def osoba_delete(request, pk):
 
 
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([SessionAuthentication, BasicAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def osoba_add(request):
     if request.method == 'POST':
